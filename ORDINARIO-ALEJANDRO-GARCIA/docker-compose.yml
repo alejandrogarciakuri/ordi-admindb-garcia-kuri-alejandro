@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_ordinario
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_DATABASE: garcia-kuri-alejandro
+      MYSQL_USER: admin
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_admin_password
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init:/docker-entrypoint-initdb.d
+    secrets:
+      - mysql_root_password
+      - mysql_admin_password
+
+volumes:
+  mysql_data:
+
+secrets:
+  mysql_root_password:
+    file: ./secrets/mysql_root_password.txt
+  mysql_admin_password:
+    file: ./secrets/mysql_admin_password.txt
